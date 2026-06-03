@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Escape Game – Le Mystère du Louvre (åk 6 · débutant) — version élève</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1c2541;--ink-soft:#2c3a63;--paper:#f5edda;--paper-2:#efe5cc;
+    --burgundy:#8c2f2a;--burgundy-2:#a63a33;--gold:#b08642;--line:#cdbf9a;--shadow:rgba(28,37,65,.18);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:"Spectral",Georgia,serif;color:var(--ink);
+    background:radial-gradient(circle at 20% 10%, #fff8e8 0%, transparent 40%),radial-gradient(circle at 85% 90%, #f0e3c4 0%, transparent 45%),var(--paper);
+    line-height:1.55;padding:0 0 60px;}
+  .toolbar{position:sticky;top:0;z-index:50;background:var(--ink);display:flex;flex-wrap:wrap;gap:10px;justify-content:center;padding:12px 16px;box-shadow:0 4px 14px var(--shadow);}
+  .toolbar button{font-family:"Special Elite",monospace;font-size:.82rem;letter-spacing:.04em;background:var(--paper);color:var(--ink);border:none;border-radius:4px;padding:9px 16px;cursor:pointer;transition:transform .12s ease, background .12s ease;}
+  .toolbar button:hover{transform:translateY(-2px);background:var(--gold);color:#fff;}
+  .toolbar button.alt{background:var(--burgundy);color:#fff;}
+  .toolbar button.alt:hover{background:var(--burgundy-2);}
+  .wrap{max-width:820px;margin:0 auto;padding:0 22px;}
+  .cover{margin:34px auto 0;background:linear-gradient(165deg,var(--ink) 0%,var(--ink-soft) 100%);color:var(--paper);border-radius:10px;padding:46px 40px 40px;position:relative;overflow:hidden;box-shadow:0 18px 40px var(--shadow);}
+  .cover::after{content:"SECRET";position:absolute;top:26px;right:-46px;transform:rotate(38deg);font-family:"Special Elite",monospace;letter-spacing:.3em;font-size:.78rem;color:#fff;background:var(--burgundy);padding:7px 60px;opacity:.92;}
+  .stamp{display:inline-block;font-family:"Special Elite",monospace;font-size:.72rem;letter-spacing:.28em;border:2px solid var(--gold);color:var(--gold);padding:5px 14px;border-radius:3px;margin-bottom:18px;}
+  .cover h1{font-family:"DM Serif Display",serif;font-weight:400;font-size:2.7rem;line-height:1.05;margin:0 0 6px;}
+  .cover .fr{font-style:italic;font-size:1.25rem;color:var(--gold);margin:0 0 22px;}
+  .cover p{margin:0 0 14px;font-size:1.04rem;color:#e9e0c8;}
+  .badge-level{display:inline-block;margin-top:6px;font-family:"Special Elite",monospace;font-size:.78rem;letter-spacing:.1em;background:rgba(255,255,255,.12);padding:6px 14px;border-radius:30px;border:1px solid rgba(255,255,255,.25);}
+  .howto{margin-top:26px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:26px 30px;box-shadow:0 6px 18px var(--shadow);}
+  .howto h2{font-family:"DM Serif Display",serif;font-weight:400;font-size:1.4rem;margin:0 0 14px;color:var(--burgundy);}
+  .howto ol{margin:0;padding-left:22px;}
+  .howto li{margin-bottom:8px;}
+  .howto .note{margin-top:16px;font-family:"Special Elite",monospace;font-size:.85rem;background:var(--paper-2);padding:12px 14px;border-left:4px solid var(--gold);border-radius:4px;}
+  .station{margin-top:28px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:0 0 28px;overflow:hidden;box-shadow:0 8px 22px var(--shadow);}
+  .station-head{background:linear-gradient(100deg,var(--ink),var(--ink-soft));color:var(--paper);padding:20px 30px;display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;}
+  .station-num{font-family:"DM Serif Display",serif;font-size:2.1rem;color:var(--gold);line-height:1;}
+  .station-head .titles h3{margin:0;font-family:"DM Serif Display",serif;font-weight:400;font-size:1.35rem;}
+  .station-head .titles .fr{font-style:italic;color:var(--gold);font-size:.98rem;}
+  .station-body{padding:24px 30px 0;}
+  .consigne{background:var(--paper-2);border-radius:6px;padding:14px 16px;margin-bottom:18px;border-left:4px solid var(--burgundy);}
+  .consigne .lbl{display:block;font-family:"Special Elite",monospace;font-size:.72rem;letter-spacing:.16em;color:var(--burgundy);margin-bottom:5px;}
+  .fr-block{border:1px dashed var(--line);border-radius:6px;padding:16px 18px;margin-bottom:16px;background:#fffdf7;}
+  .fr-block .calc{font-size:1.25rem;margin:11px 0;letter-spacing:.01em;}
+  .star{color:var(--burgundy);font-weight:600;}
+  .letter-note{font-style:italic;font-family:"Spectral",serif;line-height:1.7;}
+  .ordlista{font-family:"Special Elite",monospace;font-size:.82rem;background:#fff;border:1px solid var(--line);border-radius:4px;padding:10px 14px;margin-top:10px;color:var(--ink-soft);}
+  .ordlista b{color:var(--burgundy);}
+  .blank{display:inline-block;min-width:54px;border-bottom:2px solid var(--ink);height:1.3em;margin:0 4px;}
+
+  /* matching list with color swatches */
+  .match{list-style:none;margin:6px 0;padding:0;}
+  .match li{display:flex;align-items:center;gap:14px;margin:0 0 12px;font-size:1.15rem;}
+  .swatch{width:46px;height:46px;border-radius:8px;border:2px solid var(--ink);flex:none;}
+  .match .word{font-family:"Special Elite",monospace;font-size:1rem;}
+  .match .ans{margin-left:auto;}
+
+  /* number-word cards */
+  .numgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:12px;margin:8px 0;}
+  .numgrid .card{background:var(--paper-2);border:1px solid var(--line);border-radius:8px;padding:14px 8px;text-align:center;}
+  .numgrid .card .fw{font-size:1.2rem;font-family:"DM Serif Display",serif;}
+  .numgrid .card .bl{display:block;height:26px;border-bottom:2px solid var(--ink);margin:10px 10px 0;}
+
+  .code-out{margin-top:18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:var(--ink);color:var(--paper);border-radius:6px;padding:14px 18px;}
+  .code-out .lbl{font-family:"Special Elite",monospace;font-size:.82rem;letter-spacing:.1em;}
+  .code-box{width:64px;height:54px;background:#fff;border-radius:5px;display:flex;align-items:center;justify-content:center;color:var(--ink);font-family:"DM Serif Display",serif;font-size:1.6rem;}
+
+  .quiz .q{margin:12px 0 6px;font-weight:600;font-size:1.1rem;}
+  .quiz .opts span{display:inline-block;margin-right:20px;font-size:1.1rem;}
+  .quiz .pt{font-family:"Special Elite",monospace;color:var(--gold);font-size:.85rem;}
+
+  .decoder{margin-top:28px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:26px 30px;box-shadow:0 8px 22px var(--shadow);}
+  .decoder h2,.final h2{font-family:"DM Serif Display",serif;font-weight:400;font-size:1.5rem;color:var(--burgundy);margin:0 0 6px;}
+  .decoder .sub{font-style:italic;margin:0 0 18px;color:var(--ink-soft);}
+  table.alpha{border-collapse:collapse;width:100%;font-family:"Special Elite",monospace;}
+  table.alpha td{border:1px solid var(--line);text-align:center;padding:6px 2px;font-size:.8rem;}
+  table.alpha .ltr{font-size:1rem;color:var(--ink);background:var(--paper-2);}
+  table.alpha .num{color:var(--ink-soft);}
+  .route{margin-top:22px;display:grid;grid-template-columns:repeat(auto-fit,minmax(108px,1fr));gap:10px;}
+  .route .cell{background:var(--paper-2);border-radius:6px;padding:12px 6px;text-align:center;border:1px solid var(--line);}
+  .route .cell .t{font-family:"Special Elite",monospace;font-size:.68rem;letter-spacing:.06em;color:var(--burgundy);}
+  .route .cell .n{display:block;height:30px;border-bottom:2px solid var(--ink);margin:8px 4px 6px;}
+  .route .cell .l{display:block;height:30px;border-bottom:2px solid var(--burgundy);margin:0 4px;}
+  .route .cell .small{font-size:.62rem;color:var(--ink-soft);font-family:"Special Elite",monospace;}
+  .final{margin-top:28px;background:linear-gradient(165deg,var(--burgundy),#6e231f);color:var(--paper);border-radius:10px;padding:30px 32px;box-shadow:0 10px 26px var(--shadow);text-align:center;}
+  .final h2{color:#fff;}
+  .final .word-slots{display:flex;gap:10px;justify-content:center;margin:18px 0;flex-wrap:wrap;}
+  .final .slot{width:56px;height:64px;background:#fff;border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--ink);font-family:"DM Serif Display",serif;font-size:1.9rem;}
+  .final input{font-family:"Special Elite",monospace;font-size:1.1rem;text-align:center;padding:12px;border:none;border-radius:6px;width:240px;letter-spacing:.2em;text-transform:uppercase;}
+  .final button{font-family:"Special Elite",monospace;margin-left:8px;padding:13px 20px;background:var(--gold);color:#fff;border:none;border-radius:6px;cursor:pointer;}
+  .final .result{margin-top:16px;font-size:1.1rem;min-height:1.4em;font-weight:600;}
+  .facit{margin-top:36px;background:#fff;border:3px double var(--burgundy);border-radius:10px;padding:26px 30px;box-shadow:0 8px 22px var(--shadow);}
+  .facit.hidden{display:none;}
+  .facit .banner{font-family:"Special Elite",monospace;letter-spacing:.12em;background:var(--burgundy);color:#fff;text-align:center;padding:10px;border-radius:5px;margin:-26px -30px 22px;font-size:.85rem;}
+  .facit h2{font-family:"DM Serif Display",serif;font-weight:400;color:var(--burgundy);font-size:1.5rem;margin:0 0 12px;}
+  .facit h3{font-family:"DM Serif Display",serif;font-weight:400;font-size:1.15rem;margin:22px 0 6px;color:var(--ink);}
+  .key-table{border-collapse:collapse;width:100%;margin:10px 0;}
+  .key-table th,.key-table td{border:1px solid var(--line);padding:8px 10px;text-align:left;font-size:.95rem;}
+  .key-table th{background:var(--ink);color:var(--paper);font-family:"Special Elite",monospace;font-size:.78rem;letter-spacing:.06em;}
+  .reveal{font-family:"DM Serif Display",serif;font-size:1.5rem;color:var(--burgundy);text-align:center;margin:14px 0;letter-spacing:.18em;}
+  .facit ul{margin:6px 0;padding-left:20px;}
+  .facit li{margin-bottom:6px;}
+  footer{text-align:center;margin-top:40px;font-family:"Special Elite",monospace;font-size:.72rem;color:var(--ink-soft);letter-spacing:.08em;}
+  @media print{
+    body{background:#fff;padding:0;}
+    .no-print{display:none !important;}
+    .wrap{max-width:100%;padding:0 8mm;}
+    .cover{background:#fff;color:#000;border:2px solid #000;box-shadow:none;}
+    .cover::after{color:#000;background:#fff;border:1px solid #000;}
+    .cover .fr,.cover .badge-level,.stamp{color:#000;border-color:#000;}
+    .cover p{color:#000;}
+    .station,.howto,.decoder,.facit{box-shadow:none;}
+    .station-head,.code-out{background:#fff !important;color:#000 !important;border-bottom:2px solid #000;}
+    .station-num,.station-head .titles .fr,.code-out .lbl{color:#000 !important;}
+    .code-box,.slot{border:2px solid #000;}
+    .swatch{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    .final{background:#fff;color:#000;border:2px solid #000;box-shadow:none;}
+    .final h2,.final .result{color:#000;}
+    .key-table th{background:#fff;color:#000;}
+    .station,.decoder,.final{break-before:page;}
+    .printing-student .facit{display:none !important;}
+  }
+</style>
+</head>
+<body>
+
+
+
+<div class="wrap">
+
+  <!-- COVER -->
+  <section class="cover">
+    <span class="stamp">Dossier nº 1909 — Paris</span>
+    <h1>Mysteriet på Louvren</h1>
+    <p class="fr">Le Mystère du Louvre — niveau débutant</p>
+    <p>🔍 <strong>En tavla har försvunnit från Louvren i Paris!</strong> Ni är detektiver och ska lösa
+       <strong>fyra</strong> enkla uppdrag på franska.</p>
+    <p>Varje uppdrag ger en <strong>kodsiffra</strong>. Använd <strong>AVKODAREN</strong> för att
+       förvandla de fyra siffrorna till bokstäver – då får ni ett <strong>hemligt ord</strong>!</p>
+    <span class="badge-level">Nivå: åk 6 · Franska år 1 (nybörjare)</span>
+  </section>
+
+  <!-- HOW TO -->
+  <section class="howto">
+    <h2>Så här gör ni</h2>
+    <ol>
+      <li>Lös <strong>uppdrag 1–4</strong>. Ta hjälp av ordlistorna – de finns vid varje uppdrag!</li>
+      <li>Skriv ner <strong>kodsiffran</strong> från varje uppdrag.</li>
+      <li>Gå till <strong>Avkodaren</strong> och gör om siffrorna till bokstäver (A = 1, B = 2 …).</li>
+      <li>Sätt ihop bokstäverna och skriv det <strong>hemliga ordet</strong>! 🕵️</li>
+    </ol>
+    <p class="note">💡 Tips: Ni kan lösa uppdragen i vilken ordning ni vill. Hjälps åt i gruppen!</p>
+  </section>
+
+  <!-- ÉNIGME 1 : les couleurs -->
+  <section class="station">
+    <div class="station-head">
+      <span class="station-num">1</span>
+      <div class="titles"><h3>Färgerna</h3><span class="fr">Les couleurs</span></div>
+    </div>
+    <div class="station-body">
+      <div class="consigne">
+        <span class="lbl">Uppgift</span>
+        Vilken färg är det? Skriv färgens namn på franska bredvid varje ruta.
+        Färgen med en ★ ger er <strong>kodsiffran</strong> (siffran står efter färgen i ordlistan).
+      </div>
+      <div class="fr-block">
+        <ul class="match">
+          <li><span class="swatch" style="background:#e63329;"></span> <span class="word">= <span class="blank"></span></span></li>
+          <li><span class="swatch" style="background:#f4d52a;"></span> <span class="word">= <span class="blank"></span></span></li>
+          <li><span class="swatch" style="background:#2f9e44;"></span> <span class="word">= <span class="blank"></span></span></li>
+          <li class="star"><span class="swatch" style="background:#1971c2;"></span> <span class="word">★ = <span class="blank"></span></span></li>
+        </ul>
+        <div class="ordlista">
+          <b>Ordlista:</b><br>
+          rouge (röd) · jaune (gul) · vert (grön) · <b>bleu (blå) → 2</b>
+        </div>
+      </div>
+      <div class="code-out"><span class="lbl">KODSIFFRA Nº 1 →</span><span class="code-box"></span></div>
+    </div>
+  </section>
+
+  <!-- ÉNIGME 2 : les nombres -->
+  <section class="station">
+    <div class="station-head">
+      <span class="station-num">2</span>
+      <div class="titles"><h3>Siffrorna</h3><span class="fr">Les nombres 1–10</span></div>
+    </div>
+    <div class="station-body">
+      <div class="consigne">
+        <span class="lbl">Uppgift</span>
+        Skriv varje franskt tal som en <strong>siffra</strong>. Talet med en ★ är er <strong>kodsiffra</strong>.
+      </div>
+      <div class="fr-block">
+        <div class="numgrid">
+          <div class="card"><span class="fw">trois</span><span class="bl"></span></div>
+          <div class="card"><span class="fw">sept</span><span class="bl"></span></div>
+          <div class="card"><span class="fw">deux</span><span class="bl"></span></div>
+          <div class="card star"><span class="fw">★ douze</span><span class="bl"></span></div>
+        </div>
+        <div class="ordlista">
+          <b>Ordlista:</b> un(1) · deux(2) · trois(3) · quatre(4) · cinq(5) · six(6) · sept(7) · huit(8) · neuf(9) · dix(10) · onze(11) · douze(12)
+        </div>
+      </div>
+      <div class="code-out"><span class="lbl">KODSIFFRA Nº 2 →</span><span class="code-box"></span></div>
+    </div>
+  </section>
+
+  <!-- ÉNIGME 3 : salutations -->
+  <section class="station">
+    <div class="station-head">
+      <span class="station-num">3</span>
+      <div class="titles"><h3>Hälsningar</h3><span class="fr">Bonjour ! — le quiz</span></div>
+    </div>
+    <div class="station-body">
+      <div class="consigne">
+        <span class="lbl">Uppgift</span>
+        Välj rätt svar. Varje svar har en liten siffra. <strong>Kodsiffran</strong> är siffran för det <strong>rätta</strong> svaret på frågan med ★.
+      </div>
+      <div class="fr-block quiz">
+        <p class="q">1. Hur säger man « hej » på franska?</p>
+        <p class="opts"><span>a) Merci <span class="pt">(1)</span></span><span>b) Bonjour <span class="pt">(3)</span></span><span>c) Au revoir <span class="pt">(2)</span></span></p>
+
+        <p class="q">2. Vad betyder « merci »?</p>
+        <p class="opts"><span>a) tack <span class="pt">(4)</span></span><span>b) hej då <span class="pt">(1)</span></span><span>c) ja <span class="pt">(2)</span></span></p>
+
+        <p class="q star">★ 3. Hur säger man « jag heter… » på franska?</p>
+        <p class="opts"><span>a) Ça va <span class="pt">(2)</span></span><span>b) S'il vous plaît <span class="pt">(1)</span></span><span>c) Je m'appelle… <span class="pt">(21)</span></span></p>
+      </div>
+      <div class="code-out"><span class="lbl">KODSIFFRA Nº 3 →</span><span class="code-box"></span></div>
+    </div>
+  </section>
+
+  <!-- ÉNIGME 4 : le calcul -->
+  <section class="station">
+    <div class="station-head">
+      <span class="station-num">4</span>
+      <div class="titles"><h3>Räkna på franska</h3><span class="fr">Le calcul</span></div>
+    </div>
+    <div class="station-body">
+      <div class="consigne">
+        <span class="lbl">Uppgift</span>
+        Räkna ut talen. Skriv svaret med en <strong>siffra</strong>. Uträkningen med ★ ger er <strong>kodsiffran</strong>.
+      </div>
+      <div class="fr-block">
+        <p class="calc">trois + deux = <span class="blank"></span></p>
+        <p class="calc">six + un = <span class="blank"></span></p>
+        <p class="calc">dix − quatre = <span class="blank"></span></p>
+        <p class="calc star">★ sept + quatorze = <span class="blank"></span></p>
+        <div class="ordlista">
+          <b>Ordlista:</b> plus = + · moins = − · égale = =<br>
+          un(1)·deux(2)·trois(3)·quatre(4)·cinq(5)·six(6)·sept(7)·huit(8)·neuf(9)·dix(10)·quatorze(14)
+        </div>
+      </div>
+      <div class="code-out"><span class="lbl">KODSIFFRA Nº 4 →</span><span class="code-box"></span></div>
+    </div>
+  </section>
+
+  <!-- DECODER -->
+  <section class="decoder">
+    <h2>Avkodaren</h2>
+    <p class="sub">Le décodeur — gör om varje kodsiffra till en bokstav (A = 1, B = 2 …).</p>
+    <table class="alpha">
+      <tr><td class="ltr">A</td><td class="ltr">B</td><td class="ltr">C</td><td class="ltr">D</td><td class="ltr">E</td><td class="ltr">F</td><td class="ltr">G</td><td class="ltr">H</td><td class="ltr">I</td><td class="ltr">J</td><td class="ltr">K</td><td class="ltr">L</td><td class="ltr">M</td></tr>
+      <tr><td class="num">1</td><td class="num">2</td><td class="num">3</td><td class="num">4</td><td class="num">5</td><td class="num">6</td><td class="num">7</td><td class="num">8</td><td class="num">9</td><td class="num">10</td><td class="num">11</td><td class="num">12</td><td class="num">13</td></tr>
+      <tr><td class="ltr">N</td><td class="ltr">O</td><td class="ltr">P</td><td class="ltr">Q</td><td class="ltr">R</td><td class="ltr">S</td><td class="ltr">T</td><td class="ltr">U</td><td class="ltr">V</td><td class="ltr">W</td><td class="ltr">X</td><td class="ltr">Y</td><td class="ltr">Z</td></tr>
+      <tr><td class="num">14</td><td class="num">15</td><td class="num">16</td><td class="num">17</td><td class="num">18</td><td class="num">19</td><td class="num">20</td><td class="num">21</td><td class="num">22</td><td class="num">23</td><td class="num">24</td><td class="num">25</td><td class="num">26</td></tr>
+    </table>
+    <div class="route">
+      <div class="cell"><span class="t">Uppdrag 1</span><span class="n"></span><span class="l"></span><span class="small">siffra → bokstav</span></div>
+      <div class="cell"><span class="t">Uppdrag 2</span><span class="n"></span><span class="l"></span><span class="small">siffra → bokstav</span></div>
+      <div class="cell"><span class="t">Uppdrag 3</span><span class="n"></span><span class="l"></span><span class="small">siffra → bokstav</span></div>
+      <div class="cell"><span class="t">Uppdrag 4</span><span class="n"></span><span class="l"></span><span class="small">siffra → bokstav</span></div>
+    </div>
+  </section>
+
+  <!-- FINAL -->
+  <section class="final">
+    <h2>Det hemliga ordet</h2>
+    <p>Sätt ihop de fyra bokstäverna och skriv det hemliga ordet!</p>
+    <div class="word-slots">
+      <span class="slot"></span><span class="slot"></span><span class="slot"></span><span class="slot"></span>
+    </div>
+    <div class="no-print" style="margin-top:4px;">
+      <input id="finalInput" type="text" maxlength="16" placeholder="ÉCRIS LE MOT…" autocomplete="off" oninput="checkFinal()">
+      <p class="result" id="finalResult"></p>
+    </div>
+  </section>
+
+  <!-- TEACHER / FACIT -->
+  
+
+  <footer>Le Mystère du Louvre · Escape game · Bonne enquête, détectives !</footer>
+</div>
+
+
+<script>
+(function(){
+  var S="louvre1909:";
+  var OK=["3deeb5c3"];
+  function fnv1a(str){var h=0x811c9dc5;for(var i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,0x01000193)>>>0;}return ("0000000"+h.toString(16)).slice(-8);}
+  window.checkFinal=function(){
+    var el=document.getElementById("finalInput");
+    var r=document.getElementById("finalResult");
+    var norm=(el.value||"").toUpperCase().replace(/[^A-Z]/g,"");
+    if(!norm){r.textContent="";return;}
+    if(OK.indexOf(fnv1a(S+norm))!==-1){
+      r.style.color="#fff";
+      r.textContent="\uD83C\uDF89 Bravo ! Vous avez trouvé le mot secret. Affaire résolue !";
+    } else {
+      r.style.color="#ffd9b3";
+      r.textContent="Pas encore… vérifiez vos chiffres et le décodeur.";
+    }
+  };
+})();
+</script>
+</body>
+</html>
